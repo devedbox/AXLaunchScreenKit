@@ -15,6 +15,7 @@
 		DC76B40B1E97256400D0F3A7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DC76B4091E97256400D0F3A7 /* LaunchScreen.storyboard */; };
 		DC76B4161E97256500D0F3A7 /* AXLaunchScreenKitTests.m in Sources */ = {isa = PBXBuildFile; fileRef = DC76B4151E97256500D0F3A7 /* AXLaunchScreenKitTests.m */; };
 		DC76B4211E97256500D0F3A7 /* AXLaunchScreenKitUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = DC76B4201E97256500D0F3A7 /* AXLaunchScreenKitUITests.m */; };
+		DC76B4311E97259700D0F3A7 /* AXLaunchScreenViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DC76B4301E97259700D0F3A7 /* AXLaunchScreenViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +52,8 @@
 		DC76B41C1E97256500D0F3A7 /* AXLaunchScreenKitUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AXLaunchScreenKitUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		DC76B4201E97256500D0F3A7 /* AXLaunchScreenKitUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AXLaunchScreenKitUITests.m; sourceTree = "<group>"; };
 		DC76B4221E97256500D0F3A7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DC76B42F1E97259700D0F3A7 /* AXLaunchScreenViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AXLaunchScreenViewController.h; sourceTree = "<group>"; };
+		DC76B4301E97259700D0F3A7 /* AXLaunchScreenViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AXLaunchScreenViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,6 +109,7 @@
 				DC76B4011E97256400D0F3A7 /* ViewController.h */,
 				DC76B4021E97256400D0F3A7 /* ViewController.m */,
 				DC76B4041E97256400D0F3A7 /* Main.storyboard */,
+				DC76B42E1E97259700D0F3A7 /* Classes */,
 				DC76B4071E97256400D0F3A7 /* Assets.xcassets */,
 				DC76B4091E97256400D0F3A7 /* LaunchScreen.storyboard */,
 				DC76B40C1E97256400D0F3A7 /* Info.plist */,
@@ -138,6 +142,15 @@
 				DC76B4221E97256500D0F3A7 /* Info.plist */,
 			);
 			path = AXLaunchScreenKitUITests;
+			sourceTree = "<group>";
+		};
+		DC76B42E1E97259700D0F3A7 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				DC76B42F1E97259700D0F3A7 /* AXLaunchScreenViewController.h */,
+				DC76B4301E97259700D0F3A7 /* AXLaunchScreenViewController.m */,
+			);
+			path = Classes;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -276,6 +289,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DC76B4311E97259700D0F3A7 /* AXLaunchScreenViewController.m in Sources */,
 				DC76B4031E97256400D0F3A7 /* ViewController.m in Sources */,
 				DC76B4001E97256400D0F3A7 /* AppDelegate.m in Sources */,
 				DC76B3FD1E97256400D0F3A7 /* main.m in Sources */,
