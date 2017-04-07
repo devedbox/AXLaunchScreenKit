@@ -1,1 +1,0 @@
-../../../AXTransparentNavigationBar/AXTransparentNavigationBar/Classes/UINavigationBar+Transparent.h

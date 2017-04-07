@@ -1,1 +1,0 @@
-../../../AXResponderSchemaKit/AXResponderSchemaKit/Classes/UIAlertController+Schema.h

@@ -1,1 +1,0 @@
-../../../AXResponderSchemaKit/AXResponderSchemaKit/Classes/AXResponderSchemaComponents.h
