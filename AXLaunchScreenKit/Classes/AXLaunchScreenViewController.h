@@ -1,6 +1,6 @@
 //
 //  AXLaunchScreenViewController.h
-//  ExchangeStreet
+//  AXLaunchScreenKit
 //
 //  Created by devedbox on 2016/11/13.
 //  Copyright © 2016年 jiangyou. All rights reserved.
@@ -52,6 +52,8 @@ typedef NS_ENUM(int64_t, AXLaunchScreenViewControllerMode) {
 @property(assign, nonatomic) BOOL showsPageControl;
 /// Hides when scroll away last page. Defaults to NO.
 @property(assign, nonatomic) BOOL hidesOnScrollingAwayLastPage;
+/// Allows image inter active actions. Defaults to NO.
+@property(assign, nonatomic) BOOL allowsImageInteraction;
 @end
 
 @interface AXPreviewingFlowLayout : UICollectionViewFlowLayout

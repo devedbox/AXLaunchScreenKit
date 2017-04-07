@@ -1,6 +1,6 @@
 //
 //  AXLaunchScreenViewController.m
-//  ExchangeStreet
+//  AXLaunchScreenKit
 //
 //  Created by devedbox on 2016/11/13.
 //  Copyright © 2016年 jiangyou. All rights reserved.
@@ -286,6 +286,7 @@ static AXSDWebImageCompletionBlock AXSDWebImageCompletionHandler() {
 
 #pragma mark - Actions.
 - (IBAction)handleImagePreview:(UITapGestureRecognizer *)sender {
+    if (!_allowsImageInteraction) return;
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(_hideViewController) object:nil];
     _interactiveFromImage = YES;
     [self _hideViewController];
