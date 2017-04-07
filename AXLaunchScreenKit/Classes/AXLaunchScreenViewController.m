@@ -11,6 +11,8 @@
 #import <objc/runtime.h>
 #import <SDWebImage/UIImageView+WebCache.h>
 #import <SDWebImage/SDImageCache.h>
+#import <SDWebImage/SDWebImageManager.h>
+#import <AXResponderSchemaKit/AXResponderSchemaKit.h>
 
 typedef NS_ENUM(int64_t, AXLaunchScreenShowType) {
     AXLaunchScreenShowByPresented,
@@ -28,6 +30,10 @@ typedef NS_ENUM(int64_t, AXLaunchScreenShowType) {
     BOOL _viewDidAppear;
     /// Interactive form image.
     BOOL _interactiveFromImage;
+    
+    BOOL _viewControllerBasedStatusBarAppearance;
+    
+    NSArray<NSLayoutConstraint *> *_contraintsOfPageControl;
 }
 /// Launch page collection view.
 @property(strong, nonatomic) IBOutlet UICollectionView *collectionView;
@@ -39,10 +45,23 @@ typedef NS_ENUM(int64_t, AXLaunchScreenShowType) {
 @property(strong, nonatomic) IBOutlet UIButton *dismissButtonItem;
 /// Time intervel labal.
 @property(strong, nonatomic) IBOutlet UILabel *countingLabel;
+/// Page control.
+@property(strong, nonatomic) IBOutlet UIPageControl *pageControl;
 @end
 
 #define kAXLaunchSkipButtonSize CGSizeMake(100, 38)
 #define kAXLaunchDismissButtonSize CGSizeMake(172, 53)
+
+typedef void(^AXSDWebImageCompletionBlock)(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL);
+static AXSDWebImageCompletionBlock AXSDWebImageCompletionHandler() {
+    return ^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+        if (!error && image) {
+            if (cacheType != SDImageCacheTypeDisk) {
+                [[SDWebImageManager sharedManager] saveImageToCache:image forURL:imageURL];
+            }
+        }
+    };
+}
 
 @implementation AXLaunchScreenViewController
 #pragma mark - Schema.
@@ -54,12 +73,40 @@ typedef NS_ENUM(int64_t, AXLaunchScreenShowType) {
 }
 
 + (instancetype)viewControllerForSchemaWithParams:(NSDictionary *__autoreleasing  _Nullable *)params {
-    AXLaunchScreenViewController *viewController = [[UIStoryboard storyboardWithName:kESMainStoryboardIdentifier bundle:NSMainBundle] instantiateViewControllerWithIdentifier:kESStoryboardIdentifierWithClass(self.class)];
+    AXLaunchScreenViewController *viewController = [[UIStoryboard storyboardWithName:@"Main" bundle:NSBundle.mainBundle] instantiateViewControllerWithIdentifier:[NSString stringWithFormat:@"k%@Identifier", NSStringFromClass(self.class)]];
     viewController.duration = [(*params)[@"duration"] doubleValue];
     return viewController;
 }
 
 #pragma mark - Override.
+- (instancetype)init {
+    if (self = [super init]) {
+        [self initializer];
+    }
+    return self;
+}
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    if (self = [super initWithCoder:aDecoder]) {
+        [self initializer];
+    }
+    return self;
+}
+
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+    if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
+        [self initializer];
+    }
+    return self;
+}
+
+- (void)initializer {
+    _showsPageControl = YES;
+    _showsSkippingElements = YES;
+    
+    _viewControllerBasedStatusBarAppearance = [[NSBundle.mainBundle infoDictionary][@"UIViewControllerBasedStatusBarAppearance"] boolValue];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -94,7 +141,15 @@ typedef NS_ENUM(int64_t, AXLaunchScreenShowType) {
     _viewDidAppear = YES;
     [self performSelector:@selector(_hideViewController) withObject:nil afterDelay:_duration];
     [[NSRunLoop currentRunLoop] addTimer:[NSTimer timerWithTimeInterval:1.0 target:self selector:@selector(handleTimer:) userInfo:nil repeats:YES] forMode:NSRunLoopCommonModes];
-    [self setNeedsStatusBarAppearanceUpdate];
+    
+    if (_viewControllerBasedStatusBarAppearance) {
+        [self setNeedsStatusBarAppearanceUpdate];
+    } else {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+        [UIApplication.sharedApplication setStatusBarHidden:YES animated:YES];
+#pragma clang diagnostic pop
+    }
     
     if ([_delegate respondsToSelector:@selector(launcherControllerDidShow:)]) {
         [_delegate launcherControllerDidShow:self];
@@ -130,6 +185,20 @@ typedef NS_ENUM(int64_t, AXLaunchScreenShowType) {
     if (_mode == AXLaunchScreenViewControllerLaunchPage && _viewDidAppear) {
         [_collectionView reloadData];
     }
+    
+    [self _setupPageControl];
+}
+
+- (void)setShowsPageControl:(BOOL)showsPageControl {
+    _showsPageControl = showsPageControl;
+    
+    if (self.viewLoaded) [self _setupPageControl];
+}
+
+- (void)setShowsSkippingElements:(BOOL)showsSkippingElements {
+    _showsSkippingElements = showsSkippingElements;
+    
+    [self _updateViewsForCurrentMode];
 }
 
 #pragma mark - Getters
@@ -206,6 +275,13 @@ typedef NS_ENUM(int64_t, AXLaunchScreenShowType) {
     _dismissButtonItem.layer.masksToBounds = YES;
     _dismissButtonItem.autoresizingMask = UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin;
     return _dismissButtonItem;
+}
+
+- (UIPageControl *)pageControl {
+    if (_pageControl) return _pageControl;
+    _pageControl = [UIPageControl new];
+    _pageControl.numberOfPages = _pageImages.count;
+    return _pageControl;
 }
 
 #pragma mark - Actions.
@@ -295,19 +371,41 @@ typedef NS_ENUM(int64_t, AXLaunchScreenShowType) {
 #pragma mark - UIScrollViewDelegate
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     CGPoint contentOffset = scrollView.contentOffset;
-    if (contentOffset.x/scrollView.bounds.size.width == _pageImages.count-1) {
-        _dismissButtonItem.hidden = NO;
-        [UIView animateWithDuration:0.25 animations:^{
-            _dismissButtonItem.alpha = 1.0;
-        } completion:NULL];
-    } else {
-        [UIView animateWithDuration:0.25 animations:^{
+    NSInteger index = contentOffset.x/scrollView.bounds.size.width;
+    
+    if (_showsPageControl) [_pageControl setCurrentPage:index];
+    
+    if (index == _pageImages.count-1) {
+        if (_dismissButtonItem.hidden) {
             _dismissButtonItem.alpha = 0.0;
-        } completion:^(BOOL finished) {
-            if (finished) {
-                _dismissButtonItem.hidden = YES;
-            }
-        }];
+            _dismissButtonItem.hidden = NO;
+            [UIView animateWithDuration:0.25 animations:^{
+                _dismissButtonItem.alpha = 1.0;
+            } completion:NULL];
+        }
+    } else {
+        if (!_dismissButtonItem.hidden) {
+            [UIView animateWithDuration:0.25 animations:^{
+                _dismissButtonItem.alpha = 0.0;
+            } completion:^(BOOL finished) {
+                if (finished) {
+                    _dismissButtonItem.hidden = YES;
+                }
+            }];
+        }
+    }
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
+    CGPoint contentOffset = scrollView.contentOffset;
+    NSUInteger index = contentOffset.x / scrollView.bounds.size.width;
+    
+    if (index == _pageImages.count - 1) {
+        CGFloat offset = (NSInteger)contentOffset.x%(NSInteger)scrollView.bounds.size.width;
+        if (offset > 10 && _hidesOnScrollingAwayLastPage && _mode == AXLaunchScreenViewControllerLaunchPage) {
+            [self _hideViewController];
+        }
+        // NSLog(@"Offset: %@", @(offset));
     }
 }
 
@@ -422,8 +520,12 @@ typedef NS_ENUM(int64_t, AXLaunchScreenShowType) {
     switch (_mode) {
         case AXLaunchScreenViewControllerLaunchPage: {
             [_imageView removeFromSuperview];
-            [self.view addSubview:self.collectionView];
-            [self.view addSubview:self.skipButonItem];
+            if (_showsPageControl && _pageControl.superview) {
+                [self.view insertSubview:self.collectionView belowSubview:self.pageControl];
+            } else {
+                [self.view addSubview:self.collectionView];
+            }
+            if (_showsSkippingElements) [self.view addSubview:self.skipButonItem];
             [self.view addSubview:self.dismissButtonItem];
             if (_collectionView.contentOffset.x/_collectionView.bounds.size.width < _pageImages.count-1) {
                 _dismissButtonItem.hidden=YES;
@@ -432,6 +534,7 @@ typedef NS_ENUM(int64_t, AXLaunchScreenShowType) {
             break;
         case AXLaunchScreenViewControllerLauncher: {
             [_collectionView removeFromSuperview];
+            [_pageControl removeFromSuperview];
             [self.view addSubview:self.imageView];
             UIImage *image = [[SDImageCache sharedImageCache] imageFromDiskCacheForKey:_urlForImage];
             if (image) {
@@ -439,13 +542,13 @@ typedef NS_ENUM(int64_t, AXLaunchScreenShowType) {
             } else {
                 [_imageView sd_setImageWithURL:[NSURL URLWithString:_urlForImage?:@""] placeholderImage:nil options:SDWebImageHighPriority completed:AXSDWebImageCompletionHandler()];
             }
-            [self.view addSubview:self.skipButonItem];
+            if (_showsSkippingElements) [self.view addSubview:self.skipButonItem];
         }
             break;
         default:{}
             break;
     }
-    [self.skipButonItem addSubview:self.countingLabel];
+    if (_showsSkippingElements) [self.skipButonItem addSubview:self.countingLabel];
     [self _updateFrameOfButtons];
 }
 
@@ -467,6 +570,25 @@ typedef NS_ENUM(int64_t, AXLaunchScreenShowType) {
     
     _countingLabel.frame = _skipButonItem.bounds;
     _countingLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
+}
+     
+- (void)_setupPageControl {
+    [self.view removeConstraints:_contraintsOfPageControl];
+    [_pageControl removeFromSuperview];
+    _contraintsOfPageControl = nil;
+    if (!_showsPageControl || _mode != AXLaunchScreenViewControllerLaunchPage) { return; }
+    
+    [self.view addSubview:self.pageControl];
+    _pageControl.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    NSMutableArray *contraints = [NSMutableArray array];
+    [contraints addObject:[NSLayoutConstraint constraintWithItem:self.view attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:_pageControl attribute:NSLayoutAttributeBottom multiplier:1.0 constant:20]];
+    [contraints addObject:[NSLayoutConstraint constraintWithItem:self.view attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:_pageControl attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0.0]];
+    [_pageControl setContentHuggingPriority:UILayoutPriorityDefaultLow forAxis:UILayoutConstraintAxisHorizontal];
+    [_pageControl setContentHuggingPriority:UILayoutPriorityDefaultLow forAxis:UILayoutConstraintAxisVertical];
+    
+    _contraintsOfPageControl = [contraints copy];
+    [self.view addConstraints:_contraintsOfPageControl];
 }
 @end
 

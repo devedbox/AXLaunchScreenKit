@@ -46,6 +46,12 @@ typedef NS_ENUM(int64_t, AXLaunchScreenViewControllerMode) {
 @property(copy, nonatomic) NSString *urlForImage;
 /// Context.
 @property(strong, nonatomic) id context;
+/// Shows counting label. Defaults to YES.
+@property(assign, nonatomic) BOOL showsSkippingElements;
+/// Should show page control. Defaults to YES.
+@property(assign, nonatomic) BOOL showsPageControl;
+/// Hides when scroll away last page. Defaults to NO.
+@property(assign, nonatomic) BOOL hidesOnScrollingAwayLastPage;
 @end
 
 @interface AXPreviewingFlowLayout : UICollectionViewFlowLayout

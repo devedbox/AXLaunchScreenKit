@@ -1,0 +1,20 @@
+PODS:
+  - AXResponderSchemaKit (0.3.0)
+  - AXTransparentNavigationBar (0.1.0)
+  - SDWebImage (4.0.0):
+    - SDWebImage/Core (= 4.0.0)
+  - SDWebImage/Core (4.0.0)
+
+DEPENDENCIES:
+  - AXResponderSchemaKit
+  - AXTransparentNavigationBar
+  - SDWebImage
+
+SPEC CHECKSUMS:
+  AXResponderSchemaKit: 9b8077f88b6ff2803171deaf8085b45d5189dcfd
+  AXTransparentNavigationBar: 56e1050a358612b209345b7607a1f3c4579d7a1f
+  SDWebImage: 76a6348bdc74eb5a55dd08a091ef298e56b55e41
+
+PODFILE CHECKSUM: 997fe3ddaaaf444515a2b055e4304532783626de
+
+COCOAPODS: 1.2.0
