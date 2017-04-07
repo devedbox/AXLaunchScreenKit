@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3F0D21CFC8A18522772E9F37 /* libPods-AXLaunchScreenKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0364165FD68C26756C2B35FB /* libPods-AXLaunchScreenKit.a */; };
 		DC76B3FD1E97256400D0F3A7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DC76B3FC1E97256400D0F3A7 /* main.m */; };
 		DC76B4001E97256400D0F3A7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DC76B3FF1E97256400D0F3A7 /* AppDelegate.m */; };
 		DC76B4031E97256400D0F3A7 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DC76B4021E97256400D0F3A7 /* ViewController.m */; };
@@ -36,6 +37,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0364165FD68C26756C2B35FB /* libPods-AXLaunchScreenKit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AXLaunchScreenKit.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		59D3FF190A03B3E1655C9A93 /* Pods-AXLaunchScreenKit.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AXLaunchScreenKit.release.xcconfig"; path = "Pods/Target Support Files/Pods-AXLaunchScreenKit/Pods-AXLaunchScreenKit.release.xcconfig"; sourceTree = "<group>"; };
+		7A1FD10CD5F7583194C35B99 /* Pods-AXLaunchScreenKit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AXLaunchScreenKit.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AXLaunchScreenKit/Pods-AXLaunchScreenKit.debug.xcconfig"; sourceTree = "<group>"; };
 		DC76B3F81E97256400D0F3A7 /* AXLaunchScreenKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AXLaunchScreenKit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DC76B3FC1E97256400D0F3A7 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		DC76B3FE1E97256400D0F3A7 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -61,6 +65,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3F0D21CFC8A18522772E9F37 /* libPods-AXLaunchScreenKit.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -81,6 +86,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5C5B034E4E0866A5EB83CEC0 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				7A1FD10CD5F7583194C35B99 /* Pods-AXLaunchScreenKit.debug.xcconfig */,
+				59D3FF190A03B3E1655C9A93 /* Pods-AXLaunchScreenKit.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		AF199EAA669452D8390D780B /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				0364165FD68C26756C2B35FB /* libPods-AXLaunchScreenKit.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		DC76B3EF1E97256400D0F3A7 = {
 			isa = PBXGroup;
 			children = (
@@ -88,6 +110,8 @@
 				DC76B4141E97256500D0F3A7 /* AXLaunchScreenKitTests */,
 				DC76B41F1E97256500D0F3A7 /* AXLaunchScreenKitUITests */,
 				DC76B3F91E97256400D0F3A7 /* Products */,
+				5C5B034E4E0866A5EB83CEC0 /* Pods */,
+				AF199EAA669452D8390D780B /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -160,9 +184,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = DC76B4251E97256500D0F3A7 /* Build configuration list for PBXNativeTarget "AXLaunchScreenKit" */;
 			buildPhases = (
+				4858E816F164177D7C35E9CD /* [CP] Check Pods Manifest.lock */,
 				DC76B3F41E97256400D0F3A7 /* Sources */,
 				DC76B3F51E97256400D0F3A7 /* Frameworks */,
 				DC76B3F61E97256400D0F3A7 /* Resources */,
+				626F0A1F9FF05E0A403BF4E3 /* [CP] Embed Pods Frameworks */,
+				7D23276B0A726AA8F1893E51 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -283,6 +310,54 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		4858E816F164177D7C35E9CD /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		626F0A1F9FF05E0A403BF4E3 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-AXLaunchScreenKit/Pods-AXLaunchScreenKit-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		7D23276B0A726AA8F1893E51 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-AXLaunchScreenKit/Pods-AXLaunchScreenKit-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		DC76B3F41E97256400D0F3A7 /* Sources */ = {
@@ -439,6 +514,7 @@
 		};
 		DC76B4261E97256500D0F3A7 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7A1FD10CD5F7583194C35B99 /* Pods-AXLaunchScreenKit.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = TKA48YVS5T;
@@ -451,6 +527,7 @@
 		};
 		DC76B4271E97256500D0F3A7 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 59D3FF190A03B3E1655C9A93 /* Pods-AXLaunchScreenKit.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = TKA48YVS5T;
@@ -530,6 +607,7 @@
 				DC76B4271E97256500D0F3A7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		DC76B4281E97256500D0F3A7 /* Build configuration list for PBXNativeTarget "AXLaunchScreenKitTests" */ = {
 			isa = XCConfigurationList;
@@ -538,6 +616,7 @@
 				DC76B42A1E97256500D0F3A7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		DC76B42B1E97256500D0F3A7 /* Build configuration list for PBXNativeTarget "AXLaunchScreenKitUITests" */ = {
 			isa = XCConfigurationList;
@@ -546,6 +625,7 @@
 				DC76B42D1E97256500D0F3A7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
