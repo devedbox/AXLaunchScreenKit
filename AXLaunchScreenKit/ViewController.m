@@ -31,7 +31,7 @@ static NSString *const kESLauncherPageDidShowKey = @"kESLauncherPageDidShowKey";
     
     BOOL didReviewPages = [[NSUserDefaults standardUserDefaults] boolForKey:kESLauncherPageDidShowKey];
     BOOL shouldAddLauncher = YES;
-    didReviewPages = YES;
+    didReviewPages = NO;
     
     if (!didReviewPages) {
         vc.mode = AXLaunchScreenViewControllerLaunchPage;
@@ -45,6 +45,7 @@ static NSString *const kESLauncherPageDidShowKey = @"kESLauncherPageDidShowKey";
     if (!shouldAddLauncher) return;
     
     [self.view addSubview:vc.view];
+    [vc willMoveToParentViewController:self];
     [self addChildViewController:vc];
     [vc beginAppearanceTransition:YES animated:YES];
     [vc didMoveToParentViewController:self];
